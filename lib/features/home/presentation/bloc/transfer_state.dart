@@ -10,6 +10,7 @@ abstract class TransferState extends Equatable {
 class TransferInitialState extends TransferState {}
 
 class TransferLoadingState extends TransferState {}
+class LogOutState extends TransferState {}
 
 class TransferCompletedState extends TransferState {}
 

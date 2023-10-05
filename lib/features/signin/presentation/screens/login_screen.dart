@@ -78,6 +78,7 @@ class _LoginState extends State<LoginScreen> {
       builder: (context, state) {
         if (state is SignInInitialState ||
             state is SignInLoadingState ||
+            // state is SignedInUserState ||
             state is SignInErrorState) {
           return Scaffold(
             backgroundColor: Theme.of(context).colorScheme.primaryContainer,

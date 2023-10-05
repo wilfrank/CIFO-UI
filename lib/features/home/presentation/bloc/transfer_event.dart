@@ -17,3 +17,7 @@ class TransferUserEvent extends TransferEvent {
   @override
   List<Object> get props => [transferID];
 }
+
+class SignOutEvent extends TransferEvent {
+  const SignOutEvent();
+}

@@ -1,3 +1,5 @@
+import 'package:cifo_flutter/features/home/presentation/screens/home_screen.dart';
+import 'package:cifo_flutter/features/signin/presentation/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cifo_flutter/features/home/presentation/bloc/transfer_bloc.dart';
@@ -12,7 +14,27 @@ class SideMenuWidget extends StatelessWidget {
     return Drawer(
         child: BlocConsumer<TransferBloc, TransferState>(
       listener: (context, state) {
-        if (state is TransferLoadingState) {
+        if (state is LogOutState) {
+         ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              width: 200,
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              behavior: SnackBarBehavior.floating,
+              content: const Text("Bye Bye"),
+            ),
+          );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return const LoginScreen();
+              },
+            ),
+          );
+        } else if (state is TransferLoadingState) {
           showDialog(
             context: context,
             barrierDismissible: false,
@@ -75,7 +97,11 @@ class SideMenuWidget extends StatelessWidget {
               ListTile(
                 leading: const Icon(Icons.logout),
                 title: const Text('Salir'),
-                onTap: () {},
+                onTap: () {
+                  context.read<TransferBloc>().add(
+                        const SignOutEvent(),
+                      );
+                },
               ),
               ListTile(
                 leading: const Icon(Icons.transfer_within_a_station),

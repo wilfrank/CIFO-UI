@@ -87,7 +87,7 @@ class InjectionContainerImpl implements InjectionContainer {
 
     ///Transfer
     // Bloc
-    sl.registerFactory(() => TransferBloc(transferUser: sl()));
+    sl.registerFactory(() => TransferBloc(transferUser: sl(), secureStorage: sl()));
 
     //Usecases
     sl.registerLazySingleton(() => TransferUser(repository: sl()));

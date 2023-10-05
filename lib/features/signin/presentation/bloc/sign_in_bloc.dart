@@ -24,6 +24,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
         ));
       }, (authentication) {
         emit(SignedInUserState());
+        emit(SignInInitialState());
       });
     });
   }
