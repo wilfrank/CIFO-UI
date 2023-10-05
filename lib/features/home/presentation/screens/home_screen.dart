@@ -1,3 +1,5 @@
+import 'package:cifo_flutter/core/di/injection_container.dart';
+import 'package:cifo_flutter/core/secure_storage/secure_storage.dart';
 import 'package:cifo_flutter/features/fileManager/presentation/screen/file_manager_screen.dart';
 import 'package:cifo_flutter/features/uploadFile/presentation/screen/upload_file_screen.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +17,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    SecureStorage secureStorage = InjectionContainerImpl().sl.get<SecureStorage>();
+    String cedula =  secureStorage.getCedula();
     return Scaffold(
         appBar: AppBar(
-          title: const Center(child: Text("CiFo")),
+          title: Center(child: Text("CiFo CC: $cedula")),
         ),
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         drawer: const SideMenuWidget(),

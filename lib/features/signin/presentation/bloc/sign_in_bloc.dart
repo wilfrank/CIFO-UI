@@ -1,4 +1,5 @@
 
+import 'package:cifo_flutter/core/constants/constants.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,9 +19,8 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
         SignInEntity(email: event.cedula, password: event.password),
       );
       failureOrSignIn.fold((failure) {
-        print("Error singin Bloc");
         emit(const SignInErrorState(
-          errorMessage: "Error Sign In",
+          errorMessage: Constants.errorLogIn,
         ));
       }, (authentication) {
         emit(SignedInUserState());

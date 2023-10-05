@@ -8,7 +8,6 @@ import 'package:cifo_flutter/features/signin/domain/entities/sign_in_entity.dart
 import 'package:cifo_flutter/features/signin/domain/repositories/sign_in_repository.dart';
 import 'package:dio/dio.dart';
 
-
 class SignInRepositoryImplementation extends SignInRepository {
   final SignInRemoteDataSource signinRemoteDataSource;
   final SecureStorage secureStorage;
@@ -25,10 +24,8 @@ class SignInRepositoryImplementation extends SignInRepository {
       final signInResponseModel = await signinRemoteDataSource.loginUser(
         signInEmail: signInEntity,
       );
-
       return Right(signInResponseModel);
     } on ServerException catch (e) {
-      print('Error SignIn Repo');
       return Left(ServerFailure(e.message));
     }
   }

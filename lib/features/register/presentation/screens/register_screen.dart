@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +8,8 @@ import 'package:cifo_flutter/shared/widgets/custom_password_form_field_widget.da
 import 'package:cifo_flutter/shared/widgets/custom_text_form_field_widget.dart';
 
 import 'dart:js' as js;
+
+import 'package:url_launcher/url_launcher.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -159,7 +162,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     const SizedBox(height: 10),
                     CustomTextFormField(
-                     textController: _controllerNumber,
+                      textController: _controllerNumber,
                       focusNode: _focusNodeEmail,
                       keyboardType: TextInputType.number,
                       labelText: "Numero de Celular",
@@ -271,8 +274,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             }),
                         const Text("Aceptar los"),
                         TextButton(
-                          onPressed: () {
-                            js.context.callMethod('open', ['https://www.minambiente.gov.co/politica-de-proteccion-de-datos-personales/#:~:text=Ley%20de%20Protecci%C3%B3n%20de%20Datos,de%20naturaleza%20p%C3%BAblica%20o%20privada.']);
+                          onPressed: () async {
+                            const String uri =
+                                "https://www.minambiente.gov.co/politica-de-proteccion-de-datos-personales/#:~:text=Ley%20de%20Protecci%C3%B3n%20de%20Datos,de%20naturaleza%20p%C3%BAblica%20o%20privada.";
+                            if (kIsWeb) {
+                              // running on the web!
+                              js.context.callMethod('open', [uri]);
+                            } else {
+                              // NOT running o  n the web! You can check for additional platforms here.
+                              final Uri url = Uri.parse(uri);
+                              if (!await launchUrl(url)) {
+                                throw Exception('Could not launch $url');
+                              }
+                            }
                           },
                           child: const Text("terminos y condiciones"),
                         ),
@@ -289,7 +303,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     false) {
                                   context.read<RegisterBloc>().add(
                                         RegisterUserEvent(
-                                          phoneNumber: _controllerNumber.text,
+                                            phoneNumber: _controllerNumber.text,
                                             surname: _controllerSurName.text,
                                             name: _controllerName.text,
                                             address: _controllerAddress.text,

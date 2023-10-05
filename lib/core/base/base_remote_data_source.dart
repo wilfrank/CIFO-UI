@@ -10,6 +10,7 @@ mixin BaseRemoteDataSourceImpl implements BaseRemoteDataSource {
   @override
   handleError(DioException e) {
     final statusCode = e.response!.statusCode ?? 500;
+    print("Error in Base");
     throw ServerException(message: e.message.toString(), errorCode: statusCode);
   }
 }

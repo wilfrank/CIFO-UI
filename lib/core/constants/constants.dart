@@ -7,12 +7,14 @@ class Constants {
   static const String securedRefreshToken = 'securedRefreshToken';
 
   //Messages
+
   //Accepted
   static const String acceptedDelete = 'Borrado Exitosamente';
   static const String acceptedAuthenticate = 'Autenticado Exitosamente';
   static const String acceptedUpload = 'Archido Cargado Exitosamente';
   //Error
   static const String errorAuthenticate = 'Error con Autenticacion';
+  static const String errorLogIn = 'Email y/o Clave Incorrectos';
   static const String errorDelete = 'Error con Borrado';
   static const String errorUpload = 'Error al Subir el Archivo';
   static const String errorSelectUpload = 'Error al Seleccionar el Archivo';

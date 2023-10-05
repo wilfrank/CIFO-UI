@@ -1,4 +1,5 @@
 import 'package:cifo_flutter/core/constants/api.dart';
+import 'package:cifo_flutter/core/errors/exceptions.dart';
 import 'package:cifo_flutter/core/http/custom_http_client.dart';
 import 'package:cifo_flutter/features/signin/data/models/sign_in_email_model.dart';
 import 'package:cifo_flutter/features/signin/domain/entities/sign_in_entity.dart';
@@ -15,21 +16,24 @@ class SignInRemoteDataSourceImpl extends SignInRemoteDataSource {
   @override
   Future<Response> loginUser({required SignInEntity signInEmail}) async {
     // return SignInResponseModel.fromMap(const {'token':'tokenDePrueba'});
-
-    final jsonData = await client.post(
-      path: API.apiLogIn,
-      body: SignInEmailModel(
-        email: signInEmail.email,
-        password: signInEmail.password,
-      ).toJson(),
-    );
-
-    if (jsonData.statusCode == 200) {
-      //Used for setting Cedula
-      await client.get(
-        path: API.apiGetFiles,
+    try {
+      final jsonData = await client.post(
+        path: API.apiLogIn,
+        body: SignInEmailModel(
+          email: signInEmail.email,
+          password: signInEmail.password,
+        ).toJson(),
       );
+      print("SignInHere");
+      if (jsonData.statusCode == 200) {
+        //Used for setting Cedula
+        await client.get(
+          path: API.apiGetFiles,
+        );
+      }
+      return jsonData;
+    } catch (e) {
+      throw ServerException(message: 'Ha sucedido un error', errorCode: 403);
     }
-    return jsonData;
   }
 }

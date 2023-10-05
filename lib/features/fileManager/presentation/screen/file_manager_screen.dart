@@ -1,9 +1,11 @@
+import 'dart:js' as js;
+import 'package:cifo_flutter/features/fileManager/presentation/screen/qr_share_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:cifo_flutter/features/fileManager/presentation/bloc/files_manager_bloc.dart';
-
-import 'dart:js' as js;
 
 class FileManagerScreen extends StatelessWidget {
   const FileManagerScreen({super.key});
@@ -80,7 +82,16 @@ class FileManagerScreen extends StatelessWidget {
                             ),
                             IconButton(
                               onPressed: () async {
-                                js.context.callMethod('open', [file.url]);
+                                if (kIsWeb) {
+                                  // running on the web!
+                                  js.context.callMethod('open', [file.url]);
+                                } else {
+                                  // NOT running o  n the web! You can check for additional platforms here.
+                                  final Uri url = Uri.parse(file.url);
+                                  if (!await launchUrl(url)) {
+                                    throw Exception('Could not launch $url');
+                                  }
+                                }
                               },
                               icon: const Icon(Icons.remove_red_eye),
                               tooltip: "Ver Documento ${file.url}",
@@ -104,35 +115,22 @@ class FileManagerScreen extends StatelessWidget {
                             ),
                             IconButton(
                               onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: const Text('Compartir'),
-                                      content: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        // crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          IconButton(
-                                              onPressed: () {},
-                                              icon: const Icon(Icons.wechat_sharp)),
-                                          IconButton(
-                                              onPressed: () {},
-                                              icon: const Icon(Icons.facebook)),
-                                        ],
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(
-                                                context); //Pop Loading
-                                          },
-                                          child: const Text('Cerrar'),
-                                        ),
-                                      ],
-                                    );
-                                  },
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return QRShareScreen(url: file.url,);
+                                    },
+                                  ),
                                 );
+                                // showDialog(
+                                //   context: context,
+                                //   builder: (BuildContext context) {
+                                //     return _ShareWidget(
+                                //       url: file.url,
+                                //     );
+                                //   },
+                                // );
                               },
                               icon: const Icon(Icons.share_outlined),
                               tooltip: "Compartir",
@@ -140,7 +138,7 @@ class FileManagerScreen extends StatelessWidget {
                             Text(file.name)
                           ],
                         ),
-                      ))
+                      )),
                 ],
               ));
         } else {
@@ -171,6 +169,36 @@ class FileManagerScreen extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+class _ShareWidget extends StatelessWidget {
+  const _ShareWidget({
+    super.key,
+    required this.url,
+  });
+  final String url;
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Compartir'),
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        // crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.wechat_sharp)),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.facebook)),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context); //Pop Loading
+          },
+          child: const Text('Cerrar'),
+        ),
+      ],
     );
   }
 }

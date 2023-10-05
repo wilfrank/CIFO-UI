@@ -51,7 +51,7 @@ class _LoginState extends State<LoginScreen> {
             builder: (BuildContext context) {
               return AlertDialog(
                 title: const Text('Ups algo salio mal...'),
-                content: const Text("Email o Clave incorrecto"),
+                content:  Text(state.errorMessage),
                 actions: [
                   TextButton(
                     onPressed: () {
