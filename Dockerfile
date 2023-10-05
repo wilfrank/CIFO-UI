@@ -10,9 +10,9 @@ ARG FLUTTER_SDK=/usr/local/flutter
 ARG APP=/app/
 
 #clone flutter
-RUN git clone https://github.com/flutter/flutter.git $FLUTTER_SDK
+RUN git clone https://github.com/wilfrank/CIFO-UI.git $FLUTTER_SDK
 # change dir to current flutter folder and make a checkout to the specific version
-RUN cd $FLUTTER_SDK && git checkout efbf63d9c66b9f6ec30e9ad4611189aa80003d31
+RUN cd $FLUTTER_SDK && git checkout dev-app
 
 # setup the flutter path as an enviromental variable
 ENV PATH="$FLUTTER_SDK/bin:$FLUTTER_SDK/bin/cache/dart-sdk/bin:${PATH}"
